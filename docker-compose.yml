@@ -1,0 +1,84 @@
+# ==============================================================================
+# Docker Compose configuration for ChatUK
+# Orchestrates: Backend (Node.js/Socket.IO) + Redis (Cache) + optional local MongoDB
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # ChatUK Express + Socket.IO Backend API
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chatuk-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - path: ./backend/.env
+        required: false
+    environment:
+      - PORT=5000
+      # Route Redis traffic to the internal Redis container on the Docker network
+      - REDIS_URL=redis://redis:6379
+      - ENABLE_REDIS=true
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - chatuk-network
+
+  # ----------------------------------------------------------------------------
+  # Redis In-Memory Cache (for session caching & Socket.IO pub/sub scaling)
+  # ----------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: chatuk-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - chatuk-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+
+  # ----------------------------------------------------------------------------
+  # Optional: Local MongoDB (for offline development without Atlas)
+  # Run with: docker compose --profile with-mongo up
+  # ----------------------------------------------------------------------------
+  mongo:
+    image: mongo:7.0
+    container_name: chatuk-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - chatuk-network
+    profiles:
+      - with-mongo
+
+# ------------------------------------------------------------------------------
+# Persistent Named Volumes (Data persists even when containers are stopped/removed)
+# ------------------------------------------------------------------------------
+volumes:
+  redis_data:
+    driver: local
+  mongo_data:
+    driver: local
+
+# ------------------------------------------------------------------------------
+# Internal Bridge Network (Enables containers to discover each other by service name)
+# ------------------------------------------------------------------------------
+networks:
+  chatuk-network:
+    driver: bridge
+
