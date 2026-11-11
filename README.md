@@ -50,25 +50,25 @@ Built with **React Native (Expo SDK 58)**, **TypeScript**, **Node.js (Express 5)
 
 ## Key Features
 
-- 🛡️ **Signal-Grade End-to-End Encryption (E2EE)**:
+- **Signal-Grade End-to-End Encryption (E2EE)**:
   - **Symmetric Cipher**: XChaCha20-Poly1305 AEAD with 256-bit keys and 192-bit nonces.
   - **Asymmetric Key Wrapping**: X25519 ECDH + XSalsa20-Poly1305 multi-recipient envelope encryption.
   - **Identity & Authenticity**: Ed25519 digital signatures to protect against impersonation and MITM attacks.
   - **Zero-Knowledge Cloud Backups**: User passphrase key derivation via Argon2id (`crypto_pwhash`).
   - **Encrypted Local Storage**: Hardware-isolated key storage via iOS Keychain / Android Keystore, paired with on-device database encryption via **SQLCipher** (`expo-sqlite`).
-- ⚡ **Real-Time Communication**:
+- **Real-Time Communication**:
   - WebSocket messaging via **Socket.IO** with automatic reconnection and fallback mechanisms.
   - Instant message delivery receipts, read status indicators, live typing indicators, and user presence.
   - Live emoji reactions synchronized in real-time.
-- 📞 **WebRTC Voice Calling**:
+- **WebRTC Voice Calling**:
   - Low-latency, peer-to-peer encrypted voice calling with real-time signaling handled over Socket.IO.
-- 👥 **Group Chats & Conversation Management**:
+- **Group Chats & Conversation Management**:
   - 1-on-1 direct conversations with request acceptance/denial workflows.
   - Multi-user group conversations with administrative controls (promote/demote admins, remove participants).
-- 🎨 **Rich Customization & Media**:
+- **Rich Customization & Media**:
   - Direct client-to-Cloudinary signed uploads strictly organized under `chatuk/` storage namespaces.
   - Multi-theme support (Dark, Light, and System themes) and customizable chat wallpapers with caching.
-- 🚀 **High-Throughput In-Memory Caching**:
+- **High-Throughput In-Memory Caching**:
   - Redis cache-aside layer powering sub-millisecond session validation and identity caching.
 
 ---
@@ -277,7 +277,7 @@ Configure the backend connectivity parameters in `.env`:
 | `EXPO_PUBLIC_BACKEND_HOST` | Android Emulator loopback alias | `10.0.2.2` |
 | `EXPO_PUBLIC_BACKEND_PORT` | Backend port number | `5000` |
 
-> 💡 **Physical Device Testing**: If testing with Expo Go on a physical phone over local Wi-Fi, set `EXPO_PUBLIC_BACKEND_URL=http://<YOUR_LOCAL_IP>:5000` (e.g. `http://192.168.1.150:5000`).
+>  **Physical Device Testing**: If testing with Expo Go on a physical phone over local Wi-Fi, set `EXPO_PUBLIC_BACKEND_URL=http://<YOUR_LOCAL_IP>:5000` (e.g. `http://192.168.1.150:5000`).
 
 ---
 
